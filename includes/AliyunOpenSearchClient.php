@@ -137,7 +137,7 @@ class AliyunOpenSearchClient
     /**
      * Search by keyword.
      *
-     * @param string $keyword
+     * @param string $query Query string under AliYun Open Search API references.
      *
      * @return WP_Post[]
      */
