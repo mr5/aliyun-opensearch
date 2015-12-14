@@ -221,7 +221,6 @@ class AliyunOpenSearch
         $this->loadSDK();
         $this->loadLibraries();
         $this->registerI18N();
-        $this->registerAdminHooks();
 
         $frontend = new AliyunOpenSearchFrontend(
             $this->getPluginName(),

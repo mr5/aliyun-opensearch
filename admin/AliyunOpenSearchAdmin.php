@@ -40,7 +40,10 @@ class AliyunOpenSearchAdmin
     {
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('admin_menu', array($this, 'addOptionsPage'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
         $this->interceptPostRelatedActions();
+
     }
 
     /**
