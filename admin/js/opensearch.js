@@ -1,0 +1,1 @@
+var opensearchAdmin = 'hello';

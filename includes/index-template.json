@@ -1,0 +1,336 @@
+{
+  "tables": {
+    "main": {
+      "id": {
+        "name": "id",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "1"
+      },
+      "post_author": {
+        "name": "post_author",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_date_unixtime": {
+        "name": "post_date_unixtime",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_title": {
+        "name": "post_title",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_excerpt": {
+        "name": "post_excerpt",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_status": {
+        "name": "post_status",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "comment_status": {
+        "name": "comment_status",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "ping_status": {
+        "name": "ping_status",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "pinged": {
+        "name": "pinged",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_modified_gmt": {
+        "name": "post_modified_gmt",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_content_source": {
+        "name": "post_content_source",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_content": {
+        "name": "post_content",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_content_filtered": {
+        "name": "post_content_filtered",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_parent": {
+        "name": "post_parent",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "guid": {
+        "name": "guid",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "menu_order": {
+        "name": "menu_order",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "tags": {
+        "name": "tags",
+        "type": "TEXT",
+        "is_multi": 1,
+        "is_pk": "0"
+      },
+      "comment_count": {
+        "name": "comment_count",
+        "type": "INT",
+        "is_multi": "0",
+        "is_pk": "0"
+      },
+      "post_category": {
+        "name": "post_category",
+        "type": "INT",
+        "is_multi": 1,
+        "is_pk": "0"
+      },
+      "post_thumbnail": {
+        "name": "post_thumbnail",
+        "type": "TEXT",
+        "is_multi": "0",
+        "is_pk": "0"
+      }
+    }
+  },
+  "join": [],
+  "master": "main",
+  "plugin_info": {
+    "main": {
+      "post_content": {
+        "name": "html_remove",
+        "origin": "post_content_source",
+        "origin_type": "TEXT",
+        "target": "post_content",
+        "target_type": "TEXT",
+        "params": []
+      }
+    }
+  },
+  "index_fields": {
+    "id": {
+      "name": "id",
+      "type": "STRING",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "id"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_author": {
+      "name": "post_author",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "post_date_gmt": {
+      "name": "post_date_gmt",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "post_title": {
+      "name": "post_title",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "default"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_excerpt": {
+      "name": "post_excerpt",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_status": {
+      "name": "post_status",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "post_status"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "comment_status": {
+      "name": "comment_status",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "comment_status"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "ping_status": {
+      "name": "ping_status",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "ping_status"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "pinged": {
+      "name": "pinged",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_modified_unixtime": {
+      "name": "post_modified_unixtime",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "post_content_source": {
+      "name": "post_content_source",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "0",
+      "is_aggregate": "0"
+    },
+    "post_content": {
+      "name": "post_content",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "1",
+      "index_to": [
+        "default"
+      ],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_content_filtered": {
+      "name": "post_content_filtered",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "post_parent": {
+      "name": "post_parent",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "guid": {
+      "name": "guid",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "0"
+    },
+    "menu_order": {
+      "name": "menu_order",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "tags": {
+      "name": "tags",
+      "type": "STRING",
+      "is_filter": "1",
+      "is_search": "1",
+      "index_to": [
+        "tags"
+      ],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "comment_count": {
+      "name": "comment_count",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "post_category": {
+      "name": "post_category",
+      "type": "INT32",
+      "is_filter": "1",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "1"
+    },
+    "post_thumbnail": {
+      "name": "post_thumbnail",
+      "type": "TEXT",
+      "is_filter": "0",
+      "is_search": "0",
+      "index_to": [],
+      "is_display": "1",
+      "is_aggregate": "0"
+    }
+  }
+}

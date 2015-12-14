@@ -1,0 +1,104 @@
+
+.ali-opensearch-logo img {
+    width: 110px;
+    margin-left: 30px;
+}
+
+.ali-opensearch-logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    float: right;
+    margin-top: 24px;
+    margin-right: 24px;
+}
+
+.alert {
+    padding: 6px 12px;
+    line-height: 18px;
+    margin-bottom: 6px;
+    border-radius: 0px;
+}
+
+.alert-warning {
+    color: #f68300;
+    background-color: #FCF8E2;
+    border-color: #FBECCB;
+}
+
+.ali-opensearch-panel {
+    display: table;
+    width: 100%;
+    background: #fefefe;
+    margin-bottom: 10px;
+    cursor: default;
+}
+
+.ali-opensearch-panel a {
+    text-decoration: none;
+}
+
+.ali-opensearch-panel dd {
+    padding: 15px;
+}
+
+.ali-opensearch-panel-header {
+    display: table-cell;
+    width: 20px;
+    padding: 0 3px;
+    background: #fafafa;
+    color: #666;
+    line-height: 1.2;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.ali-form-control {
+    margin: 15px 0;
+}
+
+.ali-form-control label {
+    width: 120px;
+    display: inline-block;
+    text-align: left;
+    color: #666;
+}
+
+.ali-form-control .ali-opensearch-input {
+    outline: none;
+    border: 1px solid #eaeaea;
+    width: 320px;
+    height: 38px;
+}
+
+.ali-form-control .ali-form-tip {
+    color: #afafaf;
+    display: block;
+    margin-left: 123px;
+    margin-top: 5px;
+}
+
+.ali-form-control .ali-opensearch-input:focus {
+    border: 1px solid #00a2ca;
+    transition: all .3s;
+}
+
+a.ali-button-active {
+    background-color: #43bfe3;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+}
+
+a.ali-button-active:hover {
+    background-color: #0087b4;
+    color: white;
+    border: none;
+}
+
+a.ali-button-active:active {
+    outline: none;
+    border: none;
+}

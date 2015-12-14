@@ -1,0 +1,1 @@
+var opensearch = 'hello world';
