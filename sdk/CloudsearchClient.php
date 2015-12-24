@@ -125,7 +125,7 @@ class CloudsearchClient {
    * 当前的请求方式，有socket和curl两种。
    * @var string
    */
-  private $connect = 'curl';
+  private $connect = 'socket';
 
   /**
    * 是否打开gzip功能。

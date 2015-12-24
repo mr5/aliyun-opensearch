@@ -21,7 +21,7 @@ class AliyunOpenSearchAdmin
      * Constructor
      *
      * @param string $pluginName The name of this plugin.
-     * @param string $version    The version of this plugin.
+     * @param string $version The version of this plugin.
      */
     public function __construct($pluginName, $version)
     {
@@ -39,11 +39,15 @@ class AliyunOpenSearchAdmin
     public function run()
     {
         add_action('admin_init', array($this, 'registerSettings'));
+        add_action('admin_init', function () {
+            add_dashboard_page('哈哈', '哈哈', 'manage_options', 'hahah', function () {
+                echo 'hello world';
+            });
+        });
         add_action('admin_menu', array($this, 'addOptionsPage'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
         $this->interceptPostRelatedActions();
-
     }
 
     /**
@@ -66,8 +70,10 @@ class AliyunOpenSearchAdmin
     public function addOptionsPage()
     {
         add_options_page(
-            $this->pluginName,
-            $this->pluginName,
+//            $this->pluginName,
+//            $this->pluginName,
+            '阿里云搜索',
+            '阿里云搜索',
             'manage_options',
             $this->pluginName . '-options',
             array($this, 'displayOptionsPage')
@@ -129,7 +135,7 @@ class AliyunOpenSearchAdmin
      */
     public function displayOptionsPage()
     {
-        include plugin_dir_path(__FILE__) . 'views/options.php';
+        include plugin_dir_path(__DIR__) . 'admin/views/options.php';
     }
 
     /**
@@ -141,7 +147,7 @@ class AliyunOpenSearchAdmin
     {
         wp_enqueue_style(
             $this->pluginName,
-            plugin_dir_url(__FILE__) . 'css/opensearch.css', array(),
+            plugin_dir_url(__DIR__) . 'admin/css/opensearch.css', array(),
             $this->version, 'all'
         );
     }
@@ -155,7 +161,7 @@ class AliyunOpenSearchAdmin
     {
         wp_enqueue_script(
             $this->pluginName,
-            plugin_dir_url(__FILE__) . 'js/opensearch.js',
+            plugin_dir_url(__DIR__) . 'admin/js/opensearch.js',
             array('jquery'),
             $this->version, false
         );

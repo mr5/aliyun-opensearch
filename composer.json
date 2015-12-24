@@ -1,0 +1,23 @@
+{
+  "name": "aliyun/opensearch-wordpress",
+  "description": "AliYun Open Search plugin for WordPress.",
+  "keywords": [
+    "search",
+    "search engine",
+    "WordPress"
+  ],
+  "authors": [
+    {
+      "name": "Decent Woo",
+      "email": "mr5.simple@gmail.com",
+      "homepage": "http://mr-5.cn"
+    }
+  ],
+  "license": "MIT",
+  "autoload": {
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.7",
+    "satooshi/php-coveralls": "dev-master"
+  }
+}

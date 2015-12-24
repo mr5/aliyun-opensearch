@@ -21,7 +21,7 @@ class AliyunOpenSearchFrontend
      * Constructor
      *
      * @param string $pluginName plugin name
-     * @param string $version    plugin version
+     * @param string $version plugin version
      */
     public function __construct($pluginName, $version)
     {
@@ -47,10 +47,22 @@ class AliyunOpenSearchFrontend
         ) {
             $aosClient = AliyunOpenSearchClient::autoload();
             $keyword = $wp_the_query->query['s'];
-            $wp_the_query->posts = $aosClient->search(
-                "default:'{$keyword}' AND post_status:'publish'"
+            $limit = isset($wp_the_query->query_vars['posts_per_page'])
+                ? $wp_the_query->query_vars['posts_per_page'] : 10;
+            $page = 1;
+            if (isset($wp_the_query->query_vars['paged'])) {
+                $page = intval($wp_the_query->query_vars['paged']);
+                $page = $page > 0 ? $page : 1;
+            }
+            $offset = ($page - 1) * $limit;
+            $ret = $aosClient->search(
+                "default:'{$keyword}' AND post_status:'publish'",
+                $offset,
+                $limit
             );
-            $wp_the_query->post_count = count($wp_the_query->posts);
+            $wp_the_query->posts = $ret['posts'];
+            $wp_the_query->post_count = count($ret['posts']);
+            $wp_the_query->found_posts = $ret['total'];
 
             return false;
         }
@@ -65,7 +77,7 @@ class AliyunOpenSearchFrontend
     {
         wp_enqueue_style(
             $this->pluginName,
-            plugin_dir_url(__FILE__) . 'css/opensearch.css', array(),
+            plugin_dir_url(__DIR__) . 'frontend/css/opensearch.css', array(),
             $this->version,
             'all'
         );
@@ -80,7 +92,7 @@ class AliyunOpenSearchFrontend
     {
         wp_enqueue_script(
             $this->pluginName,
-            plugin_dir_url(__FILE__) . 'js/opensearch.js',
+            plugin_dir_url(__DIR__) . 'frontend/js/opensearch.js',
             array('jquery'),
             $this->version,
             false

@@ -21,10 +21,10 @@ class AliyunOpenSearchClient
     /**
      * Constructor
      *
-     * @param string $key      AliYun AccessKey
-     * @param string $secret   AliYun Secret
-     * @param string $host     AliYun Open Search API endpoint.
-     * @param string $appName  AliYun Open Search application name.
+     * @param string $key AliYun AccessKey
+     * @param string $secret AliYun Secret
+     * @param string $host AliYun Open Search API endpoint.
+     * @param string $appName AliYun Open Search application name.
      * @param string $key_type AliYun key type.
      */
     public function __construct($key, $secret, $host, $appName, $key_type = 'aliyun')
@@ -139,21 +139,33 @@ class AliyunOpenSearchClient
      *
      * @param string $query Query string under AliYun Open Search API references.
      *
-     * @return WP_Post[]
+     * @return array
      */
-    public function search($query)
+    public function search($query, $offset = 0, $limit = 10)
     {
         $searcher = new CloudsearchSearch($this->cloudsearchClient);
         $searcher->addIndex($this->appName);
         $searcher->setQueryString($query);
         $searcher->setFormat('json');
-        $searcher->setHits(10);
+        $searcher->setHits($limit);
+        $searcher->setStartHit($offset);
         $searcher->addSummary('post_content', 150, 'em', '...', 3);
         $searcher->addSummary('post_title');
 
 
         $ret = $searcher->search();
         $ret = json_decode($ret);
+        if ($ret && $ret->errors) {
+            $messages = '<h4>请求搜索服务器时,发生以下错误,请检查您的配置是否有误:</h4><br>';
+            foreach ($ret->errors as $error) {
+                $messages .= $error->code . ': ' . $error->message . '<br>';
+            }
+            wp_die($messages);
+        }
+        $result = array(
+            'total' => 0,
+            'posts' => array()
+        );
         if ($ret && isset($ret->result) && $ret->result->viewtotal > 0) {
             $posts = array();
             $localOffsetSecs = get_option('gmt_offset') * HOUR_IN_SECONDS;
@@ -182,10 +194,11 @@ class AliyunOpenSearchClient
                 wp_cache_set($post->ID, $post, 'posts');
             }
 
-            return $posts;
+            $result['posts'] = $posts;
+            $result['total'] = $ret->result->total;
         }
 
-        return array();
+        return $result;
 
     }
 

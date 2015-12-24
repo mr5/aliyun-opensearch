@@ -15,7 +15,7 @@
             </dt>
             <dd>
                 <div style="padding:20px 0;" class="clearfix">
-                    <a href="javascript:;" class="ali-button-active">重建索引</a>
+                    <a href="javascript:;" class="ali-button-active" title="第一次也可以通过「重建索引」来初始化">重建索引</a>
                     <a href="javascript:;" class="ali-button-active">清空文章</a>
                 </div>
             </dd>
@@ -37,8 +37,8 @@
                            name="<?php echo AliyunOpenSearchOptions::OPTION_NAME_ACCESS_KEY; ?>"
                            value="<?php echo AliyunOpenSearchOptions::getAccessKey(); ?>">
                     <span class="ali-form-tip">
-                        Access Key ID 和 Access Key Secret 可在
-                        <a href="https://ak-console.aliyun.com/#/accesskey" target="_blank">阿里云后台</a> 找到
+                        You can get `Access Key ID` and  `Access Key Secret` from
+                        <a href="https://ak-console.aliyun.com/#/accesskey" target="_blank">AliYun dashboard</a>
                     </span>
                 </div>
                 <div class="ali-form-control">
@@ -49,17 +49,18 @@
                 </div>
 
                 <div class="ali-form-control">
-                    <label for="aliyun-app-name">应用名称: </label>
+                    <label for="aliyun-app-name">Application Name: </label>
                     <input class="ali-opensearch-input" id="aliyun-app-name"
                            name="<?php echo AliyunOpenSearchOptions::OPTION_NAME_APP_NAME; ?>"
                            value="<?php echo AliyunOpenSearchOptions::getAppName(); ?>">
                     <span class="ali-form-tip">
                         用于区隔您的其他应用。将使用该应用名称自动创建应用，无需到阿里云后台创建。
+                        <a href="<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'download-template.php' ?>">下载模板</a>
                     </span>
 
                 </div>
                 <div class="ali-form-control">
-                    <label for="aliyun-api-host">API 地址: </label>
+                    <label for="aliyun-api-host">API Endpoint: </label>
                     <input class="ali-opensearch-input" id="aliyun-api-host"
                            name="<?php echo AliyunOpenSearchOptions::OPTION_NAME_HOST; ?>"
                            value="<?php echo AliyunOpenSearchOptions::getHost(); ?>">

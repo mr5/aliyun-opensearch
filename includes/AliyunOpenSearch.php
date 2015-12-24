@@ -31,7 +31,7 @@ class AliyunOpenSearch
      * Constructor
      *
      * @param string $pluginName Plugin name
-     * @param string $version    Plugin version
+     * @param string $version Plugin version
      */
     public function __construct($pluginName, $version)
     {
@@ -72,9 +72,9 @@ class AliyunOpenSearch
         include_once plugin_dir_path(dirname(__FILE__))
             . 'includes/AliyunOpenSearchClient.php';
         include_once plugin_dir_path(dirname(__FILE__))
-            . 'admin/AliyunOpenSearchAdmin.php';
+            . 'includes/AliyunOpenSearchAdmin.php';
         include_once plugin_dir_path(dirname(__FILE__))
-            . 'frontend/AliyunOpenSearchFrontend.php';
+            . 'includes/AliyunOpenSearchFrontend.php';
 
     }
 
@@ -118,15 +118,15 @@ class AliyunOpenSearch
     /**
      * Add a new action to the collection to be registered with WordPress.
      *
-     * @param string $hook          The name of the WordPress action
+     * @param string $hook The name of the WordPress action
      *                              that is being registered.
-     * @param object $component     A reference to the instance of the object on
+     * @param object $component A reference to the instance of the object on
      *                              which the action is defined.
-     * @param string $callback      The name of the function definition
+     * @param string $callback The name of the function definition
      *                              on the $component.
-     * @param int    $priority      Optional. he priority at which the function
+     * @param int $priority Optional. he priority at which the function
      *                              should be fired. Default is 10.
-     * @param int    $accepted_args Optional. The number of arguments that should
+     * @param int $accepted_args Optional. The number of arguments that should
      *                              be passed to the $callback.Default is 1.
      *
      * @return void
@@ -137,7 +137,8 @@ class AliyunOpenSearch
         $callback,
         $priority = 10,
         $accepted_args = 1
-    ) {
+    )
+    {
         $this->actions = $this->add(
             $this->actions, $hook, $component, $callback, $priority, $accepted_args
         );
@@ -146,15 +147,15 @@ class AliyunOpenSearch
     /**
      * Add a new filter to the collection to be registered with WordPress.
      *
-     * @param string $hook          The name of the WordPress filter
+     * @param string $hook The name of the WordPress filter
      *                              that is being registered.
-     * @param object $component     A reference to the instance of
+     * @param object $component A reference to the instance of
      *                              the object on which the filter is defined.
-     * @param string $callback      The name of the function definition
+     * @param string $callback The name of the function definition
      *                              on the $component.
-     * @param int    $priority      Optional. he priority at which the function
+     * @param int $priority Optional. he priority at which the function
      *                              should be fired. Default is 10.
-     * @param int    $accepted_args Optional . The number of arguments that should
+     * @param int $accepted_args Optional . The number of arguments that should
      *                              be passed to the $callback. Default is 1
      *
      * @return void
@@ -165,7 +166,8 @@ class AliyunOpenSearch
         $callback,
         $priority = 10,
         $accepted_args = 1
-    ) {
+    )
+    {
         $this->filters = $this->add(
             $this->filters, $hook, $component, $callback, $priority, $accepted_args
         );
@@ -175,17 +177,17 @@ class AliyunOpenSearch
      * A utility function that is used to register the actions
      * and hooks into a single collection.
      *
-     * @param array  $hooks         The collection of hooks that is being registered
+     * @param array $hooks The collection of hooks that is being registered
      *                              (that is, actions or filters).
-     * @param string $hook          The name of the WordPress filter that is
+     * @param string $hook The name of the WordPress filter that is
      *                              being registered.
-     * @param object $component     A reference to the instance of the object
+     * @param object $component A reference to the instance of the object
      *                              on which the filter is defined.
-     * @param string $callback      The name of the function definition
+     * @param string $callback The name of the function definition
      *                              on the $component.
-     * @param int    $priority      The priority at which the function
+     * @param int $priority The priority at which the function
      *                              should be fired.
-     * @param int    $accepted_args The number of arguments that should
+     * @param int $accepted_args The number of arguments that should
      *                              be passed to the $callback.
      *
      * @return array The collection of actions and filters registered with WordPress.
@@ -197,7 +199,8 @@ class AliyunOpenSearch
         $callback,
         $priority,
         $accepted_args
-    ) {
+    )
+    {
 
         $hooks[] = array(
             'hook' => $hook,
