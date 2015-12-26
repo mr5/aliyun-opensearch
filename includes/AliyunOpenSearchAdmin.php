@@ -21,7 +21,7 @@ class AliyunOpenSearchAdmin
      * Constructor
      *
      * @param string $pluginName The name of this plugin.
-     * @param string $version The version of this plugin.
+     * @param string $version    The version of this plugin.
      */
     public function __construct($pluginName, $version)
     {
@@ -78,8 +78,42 @@ class AliyunOpenSearchAdmin
             $this->pluginName . '-options',
             array($this, 'displayOptionsPage')
         );
+//        add_management_page();
+
+        add_management_page(
+            '阿里云搜索',
+            '导入所有文章',
+            'manage_options',
+            $this->pluginName . '-reindex',
+            array($this, 'indexPosts')
+        );
     }
 
+    /**
+     * Create index for all posts.
+     *
+     * @return void
+     */
+    public function indexPosts()
+    {
+        $query = new WP_Query();
+        $posts_per_page = 10;
+        $paged = isset($_REQUEST['paged']) ? intval($_REQUEST['paged']) : 1;
+        if ($paged < 1) {
+            $paged = 1;
+        }
+        $posts = $query->query(
+            array(
+                'posts_per_page' => $posts_per_page,
+                'paged' => $paged
+            )
+        );
+        $currentProcessing = count($posts) + (($paged - 1) * $posts_per_page);
+        $hasMore = $paged * $posts_per_page < $query->found_posts;
+        AliyunOpenSearchClient::autoload()->savePosts($posts);
+        include plugin_dir_path(__DIR__) . 'admin/views/indexPosts.php';
+
+    }
 
     /**
      * Intercept post related actions.
