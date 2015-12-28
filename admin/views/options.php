@@ -1,6 +1,6 @@
 <div class="wrap">
 
-    <?php include plugin_dir_path(__FILE__) . '/header.php' ?>
+    <?php include dirname(__FILE__) . '/header.php' ?>
 
 
     <form method="post" action="options.php" novalidate="novalidate">
@@ -11,7 +11,8 @@
             </dt>
             <dd>
                 <div style="padding:20px 0;" class="clearfix">
-                    <a href="javascript:;" class="ali-button-active" title="第一次也可以通过「重建索引」来初始化">重建索引</a>
+                    <a href="tools.php?page=aliyun-open-search-reindex" class="ali-button-active"
+                       title="第一次也可以通过「重建索引」来初始化">重建索引</a>
                     <a href="javascript:;" class="ali-button-active">清空文章</a>
                 </div>
             </dd>

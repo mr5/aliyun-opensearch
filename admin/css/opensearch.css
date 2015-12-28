@@ -102,3 +102,20 @@ a.ali-button-active:active {
     outline: none;
     border: none;
 }
+
+.aliyun-progress {
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.aliyun-progress-bg {
+    background: #eee;
+    width: 600px;
+}
+
+.aliyun-progress-fr {
+    background: #00a2ca;
+    width: 300px;
+}

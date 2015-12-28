@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="AliYun Open Search WordPress Test Suite">
+            <directory>tests/</directory>
+        </testsuite>
+    </testsuites>
+
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">includes/</directory>
+            <exclude>
+                <directory>./admin</directory>
+                <directory>./build</directory>
+                <directory>./frontend</directory>
+                <directory>./sdk</directory>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+    </listeners>
+    <logging>
+        <log type="coverage-html" target="build/logs/clover.html"/>
+
+
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+</phpunit>

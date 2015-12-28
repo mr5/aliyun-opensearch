@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Administrative logic of AliYun Open Search WordPress plugin.
+ */
 class AliyunOpenSearchAdmin
 {
 
@@ -18,17 +21,48 @@ class AliyunOpenSearchAdmin
     protected $version;
 
     /**
+     * @var AliyunOpenSearchClient
+     */
+    protected $aliyunOpenSearchClient;
+
+    /**
+     * Post types sync to aliyun accepted.
+     *
+     * @var array
+     */
+    protected $acceptedSyncTypes = array('page', 'post');
+
+    /**
      * Constructor
      *
      * @param string $pluginName The name of this plugin.
-     * @param string $version    The version of this plugin.
+     * @param string $version The version of this plugin.
      */
-    public function __construct($pluginName, $version)
+    public function __construct($pluginName, $version, AliyunOpenSearchClient $aliyunOpenSearchClient)
     {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
 
+        $this->aliyunOpenSearchClient = $aliyunOpenSearchClient;
+
+    }
+
+    /**
+     * @param $aliyunOpenSearchClient
+     */
+    public function setOpenSearchClient($aliyunOpenSearchClient)
+    {
+        $this->aliyunOpenSearchClient = $aliyunOpenSearchClient;
+
+    }
+
+    /**
+     * @return AliyunOpenSearchClient
+     */
+    private function getOpenSearchClient()
+    {
+        return $this->aliyunOpenSearchClient;
     }
 
     /**
@@ -38,15 +72,12 @@ class AliyunOpenSearchAdmin
      */
     public function run()
     {
+
         add_action('admin_init', array($this, 'registerSettings'));
-        add_action('admin_init', function () {
-            add_dashboard_page('哈哈', '哈哈', 'manage_options', 'hahah', function () {
-                echo 'hello world';
-            });
-        });
         add_action('admin_menu', array($this, 'addOptionsPage'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+
         $this->interceptPostRelatedActions();
     }
 
@@ -70,19 +101,16 @@ class AliyunOpenSearchAdmin
     public function addOptionsPage()
     {
         add_options_page(
-//            $this->pluginName,
-//            $this->pluginName,
-            '阿里云搜索',
+            '阿里云搜索 - 配置',
             '阿里云搜索',
             'manage_options',
             $this->pluginName . '-options',
             array($this, 'displayOptionsPage')
         );
-//        add_management_page();
 
         add_management_page(
-            '阿里云搜索',
-            '导入所有文章',
+            '阿里云搜索 - 索引所有文章到阿里云',
+            '索引所有文章到阿里云',
             'manage_options',
             $this->pluginName . '-reindex',
             array($this, 'indexPosts')
@@ -97,22 +125,24 @@ class AliyunOpenSearchAdmin
     public function indexPosts()
     {
         $query = new WP_Query();
-        $posts_per_page = 10;
-        $paged = isset($_REQUEST['paged']) ? intval($_REQUEST['paged']) : 1;
-        if ($paged < 1) {
-            $paged = 1;
-        }
-        $posts = $query->query(
-            array(
-                'posts_per_page' => $posts_per_page,
-                'paged' => $paged
-            )
-        );
-        $currentProcessing = count($posts) + (($paged - 1) * $posts_per_page);
-        $hasMore = $paged * $posts_per_page < $query->found_posts;
-        AliyunOpenSearchClient::autoload()->savePosts($posts);
-        include plugin_dir_path(__DIR__) . 'admin/views/indexPosts.php';
 
+        $posts_per_page = 10;
+        $paged = isset($_REQUEST['paged']) ? intval($_REQUEST['paged']) : 0;
+        $hasMore = false;
+        $currentProcessing = 0;
+        if ($paged > 0) {
+            $posts = $query->query(
+                array(
+                    'posts_per_page' => $posts_per_page,
+                    'paged' => $paged
+                )
+            );
+            $currentProcessing = count($posts) + (($paged - 1) * $posts_per_page);
+            $hasMore = $paged * $posts_per_page < $query->found_posts;
+            $this->getOpenSearchClient()->savePosts($posts);
+        }
+
+        include plugin_dir_path(dirname(__FILE__)) . 'admin/views/indexPosts.php';
     }
 
     /**
@@ -120,7 +150,7 @@ class AliyunOpenSearchAdmin
      *
      * @return void
      */
-    protected function interceptPostRelatedActions()
+    private function interceptPostRelatedActions()
     {
         add_action('save_post', array($this, 'afterSavePost'));
         add_action('delete_post', array($this, 'afterDeletePost'));
@@ -137,7 +167,7 @@ class AliyunOpenSearchAdmin
     {
         $post = get_post($postId);
         if (!$post
-            || !in_array($post->post_type, ['page', 'post'])
+            || !in_array($post->post_type, $this->acceptedSyncTypes)
             || $post->post_parent != 0
         ) {
             return;
@@ -146,8 +176,7 @@ class AliyunOpenSearchAdmin
         if ($post->post_status == 'auto-draft') {
             return;
         }
-        $post = get_post($postId);
-        AliyunOpenSearchClient::autoload()->savePosts([$post]);
+        $this->getOpenSearchClient()->savePosts(array($post));
     }
 
     /**
@@ -159,7 +188,14 @@ class AliyunOpenSearchAdmin
      */
     public function afterDeletePost($postId)
     {
-        AliyunOpenSearchClient::autoload()->deletePosts(array(get_post($postId)));
+        $post = get_post($postId);
+        if (!$post
+            || !in_array($post->post_type, $this->acceptedSyncTypes)
+            || $post->post_parent != 0
+        ) {
+            return;
+        }
+        $this->getOpenSearchClient()->deletePosts(array($post));
     }
 
     /**
@@ -169,7 +205,7 @@ class AliyunOpenSearchAdmin
      */
     public function displayOptionsPage()
     {
-        include plugin_dir_path(__DIR__) . 'admin/views/options.php';
+        include plugin_dir_path(dirname(__FILE__)) . 'admin/views/options.php';
     }
 
     /**
@@ -181,8 +217,10 @@ class AliyunOpenSearchAdmin
     {
         wp_enqueue_style(
             $this->pluginName,
-            plugin_dir_url(__DIR__) . 'admin/css/opensearch.css', array(),
-            $this->version, 'all'
+            plugin_dir_url(dirname(__FILE__)) . 'admin/css/opensearch.css',
+            array(),
+            $this->version,
+            'all'
         );
     }
 
@@ -195,9 +233,10 @@ class AliyunOpenSearchAdmin
     {
         wp_enqueue_script(
             $this->pluginName,
-            plugin_dir_url(__DIR__) . 'admin/js/opensearch.js',
+            plugin_dir_url(dirname(__FILE__)) . 'admin/js/opensearch.js',
             array('jquery'),
-            $this->version, false
+            $this->version,
+            false
         );
     }
 }

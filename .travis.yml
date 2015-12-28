@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.3
   - 5.4
   - 5.5
   - 5.6
@@ -9,14 +10,22 @@ services:
   - mysql-server
 
 before_script:
+  - mkdir -p build/logs
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction --dev
-  - pyrus install pear/PHP_CodeSniffer
   - phpenv rehash
 
 script:
-  - vendor/bin/phpunit --verbose
-  - phpcs --standard=PSR2 --extensions=php --warning-severity=0 ./src
+  - ./vendor/bin/phpunit --verbose
 
-after_script:
+after_success:
   - ./vendor/bin/coveralls -v
+deploy:
+    provider: releases
+    api_key:
+        secure: EH3xkaLCQIK4YToB4pFHz4L9Uhjh1eG5tG2i94OP6R3KVfmC3fugSTQSchKwlkJYdTl/Uj7Px0YUr0H0FeCvmi4lVai/NEM2PGthv6s6bO69MmivKhjkceqgcuDSDHsu/eNb0+4VC6jC7g6vGfTeKNUj17QQgLyFyG1kFN5xqbM=
+    file: build/aliyun-opensearch-wordpress.zip
+    skip_cleanup: true
+    on:
+        tags: true
+        all_branches: true

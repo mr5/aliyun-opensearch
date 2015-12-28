@@ -1,6 +1,6 @@
 <?php
 
-class AliyunOpenSearchClient
+class AliyunOpenSearchClient3
 {
     /**
      * @var AliyunOpenSearchClient
@@ -10,41 +10,13 @@ class AliyunOpenSearchClient
      * @var CloudsearchClient
      */
     protected $cloudsearchClient;
-    /**
-     * Application name of AliYun Open Search.
-     *
-     * @var string
-     */
+
     protected $appName;
-    /**
-     * Access Key of AliYun Open Search.
-     *
-     * @var string
-     */
     protected $key;
-    /**
-     * Access secret of AliYun Open Search.
-     *
-     * @var string
-     */
-    protected $secret;
-    /**
-     * Endpoint of AliYun Open Search API.
-     *
-     * @var string
-     */
     protected $host;
-
-    /**
-     * @var CloudsearchDoc
-     */
-    protected $cloudSearchDoc = null;
-
-    protected $options = array();
-
-    protected $keyType = 'aliyun';
-
-    protected $cloudsearchSearch = null;
+    protected $secret;
+    const TYPE_POST = 1;
+    const TYPE_PAGE = 2;
 
     /**
      * Constructor
@@ -61,95 +33,15 @@ class AliyunOpenSearchClient
         $this->secret = $secret;
         $this->host = $host;
         $this->appName = $appName;
-        $this->keyType = $key_type;
-        $this->options = array('host' => $this->host, 'debug' => true);
-
+        $options = array('host' => $this->host, 'debug' => true);
+        $this->cloudsearchClient = new CloudsearchClient(
+            $this->key,
+            $this->secret,
+            $options,
+            $key_type
+        );
     }
 
-    /**
-     * Set CloudsearchDoc to prevent default `CloudsearchDoc` generation.
-     * Warning: You must call it at once this class instanced,
-     * otherwise something strange will be happened.
-     *
-     * @param $cloudSearchDoc
-     */
-    public function setCloudSearchDoc($cloudSearchDoc)
-    {
-        $this->cloudSearchDoc = $cloudSearchDoc;
-    }
-
-    /**
-     * Get `CloudsearchDoc`, default object will be instanced
-     * on `setCloudSearchDoc` has never been called before.
-     *
-     * @return CloudsearchDoc
-     */
-    private function getCloudSearchDoc()
-    {
-        if ($this->cloudSearchDoc == null) {
-            $this->cloudSearchDoc = new CloudsearchDoc($this->appName, $this->getCloudSearchClient());
-        }
-        return $this->cloudSearchDoc;
-    }
-
-    /**
-     * Set CloudsearchSearch to prevent default `CloudsearchSearch` generation.
-     * Warning: You must call it at once this class instanced,
-     * otherwise something strange will be happened.
-     *
-     * @param CloudsearchSearch $cloudsearchSearch
-     */
-    public function setCloudsearchSearch(CloudsearchSearch $cloudsearchSearch)
-    {
-        $this->cloudsearchSearch = $cloudsearchSearch;
-    }
-
-    /**
-     * Get `CloudsearchSearch`, default object will be instanced
-     * on `setCloudsearchSearch` has never been called before.
-     *
-     * @return CloudsearchSearch
-     */
-    private function getCloudsearchSearch()
-    {
-        if ($this->cloudsearchSearch == null) {
-            $this->cloudsearchSearch = new CloudsearchSearch($this->getCloudSearchClient());
-        }
-
-        return $this->cloudsearchSearch;
-    }
-
-    /**
-     * Set `CloudsearchClient` to prevent default `CloudsearchClient` generation.
-     * Warning: You must call it at once this class instanced,
-     * otherwise something strange will be happened.
-     *
-     * @param CloudsearchClient $cloudSearchClient
-     */
-    public function setCloudSearchClient(CloudsearchClient $cloudSearchClient)
-    {
-        $this->cloudsearchClient = $cloudSearchClient;
-    }
-
-    /**
-     * Get `CloudsearchClient`, default object will be instanced
-     * on `setCloudSearchClient` has never been called before.
-     *
-     * @return CloudsearchClient
-     */
-    private function getCloudSearchClient()
-    {
-        if ($this->cloudsearchClient == null) {
-            $this->cloudsearchClient = new CloudsearchClient(
-                $this->key,
-                $this->secret,
-                $this->options,
-                $this->keyType
-            );
-        }
-
-        return $this->cloudsearchClient;
-    }
 
     /**
      * Delete given posts from AliYun Open Search.
@@ -160,7 +52,7 @@ class AliyunOpenSearchClient
      */
     public function deletePosts(array $posts)
     {
-        $csDoc = $this->getCloudSearchDoc();
+        $csDoc = new CloudsearchDoc($this->appName, $this->cloudsearchClient);
         $docs = array();
         /** @var WP_Post $post */
         foreach ($posts as $post) {
@@ -189,7 +81,7 @@ class AliyunOpenSearchClient
      */
     public function savePosts(array $posts)
     {
-        $csDoc = $this->getCloudSearchDoc();
+        $csDoc = new CloudsearchDoc($this->appName, $this->cloudsearchClient);
         $docs = array();
         /** @var WP_Post $post */
         foreach ($posts as $post) {
@@ -251,7 +143,7 @@ class AliyunOpenSearchClient
      */
     public function search($query, $offset = 0, $limit = 10)
     {
-        $searcher = $this->getCloudsearchSearch();
+        $searcher = new CloudsearchSearch($this->cloudsearchClient);
         $searcher->addIndex($this->appName);
         $searcher->setQueryString($query);
         $searcher->setFormat('json');

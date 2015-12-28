@@ -21,7 +21,17 @@ if (!defined('WPINC')) {
  */
 require plugin_dir_path(__FILE__) . 'includes/AliyunOpenSearch.php';
 define('ALI_OPENSEARCH_PLUGIN_NAME', 'aliyun-open-search');
-$opensearch = new AliyunOpenSearch(ALI_OPENSEARCH_PLUGIN_NAME, '0.1');
-
-$opensearch->run();
+$aliyun_opensearch = new AliyunOpenSearch(ALI_OPENSEARCH_PLUGIN_NAME, '0.1');
+$aliyun_opensearch->initialize();
+$frontend = new AliyunOpenSearchFrontend(
+    $aliyun_opensearch->getPluginName(),
+    $aliyun_opensearch->getVersion(),
+    AliyunOpenSearchClient::autoload()
+);
+$admin = new AliyunOpenSearchAdmin(
+    $aliyun_opensearch->getPluginName(),
+    $aliyun_opensearch->getVersion(),
+    AliyunOpenSearchClient::autoload()
+);
+$aliyun_opensearch->run($admin, $frontend);
 

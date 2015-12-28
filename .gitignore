@@ -1,3 +1,5 @@
 /vendor/
 /tmp/
 /composer.lock
+/build/
+.DS_Store
