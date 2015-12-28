@@ -1,3 +1,6 @@
 filter:
   excluded_paths:
+    - admin/*
+    - frontend/*
     - sdk/*
+    - tests/*
