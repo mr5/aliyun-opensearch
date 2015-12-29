@@ -76,6 +76,7 @@
     display: block;
     margin-left: 123px;
     margin-top: 5px;
+    max-width: 535px;
 }
 
 .ali-form-control .ali-opensearch-input:focus {

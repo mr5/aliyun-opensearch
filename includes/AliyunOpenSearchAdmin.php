@@ -104,7 +104,7 @@ class AliyunOpenSearchAdmin
             '阿里云搜索 - 配置',
             '阿里云搜索',
             'manage_options',
-            $this->pluginName . '-options',
+            'aliyun-open-search-options',
             array($this, 'displayOptionsPage')
         );
 
@@ -112,7 +112,7 @@ class AliyunOpenSearchAdmin
             '阿里云搜索 - 索引所有文章到阿里云',
             '索引所有文章到阿里云',
             'manage_options',
-            $this->pluginName . '-reindex',
+            'aliyun-open-search-reindex',
             array($this, 'indexPosts')
         );
     }

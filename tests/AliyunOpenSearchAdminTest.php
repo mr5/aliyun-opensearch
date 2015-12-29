@@ -58,8 +58,8 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
     public function testAddOptionsPage()
     {
         $this->admin->addOptionsPage();
-        $this->assertTrue(aos_has_page($this->pluginName . '-reindex'));
-        $this->assertTrue(aos_has_page($this->pluginName . '-options'));
+        $this->assertTrue(aos_has_page('aliyun-open-search-reindex'));
+        $this->assertTrue(aos_has_page('aliyun-open-search-options'));
     }
 
     /**
