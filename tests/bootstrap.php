@@ -375,6 +375,7 @@ class WP_Post
      */
     public $post_parent = 0;
 
+    public $post_category = 0;
     /**
      * The unique identifier for a post, not necessarily a URL, used as the feed GUID.
      *
@@ -420,6 +421,20 @@ class WP_Post
      * @var string
      */
     public $filter;
+}
+
+function get_the_post_thumbnail()
+{
+    return '';
+}
+
+function wp_get_post_tags()
+{
+    return array();
+}
+
+function wp_cache_set()
+{
 }
 
 function get_post($ID)
@@ -477,8 +492,22 @@ function is_admin()
     return $wp_query->query_vars['is_admin'];
 }
 
+Class WPDieException extends \Exception
+{
+
+}
+
+function wp_die()
+{
+    throw new WPDieException();
+}
+define( 'MINUTE_IN_SECONDS', 60 );
+define( 'HOUR_IN_SECONDS',   60 * MINUTE_IN_SECONDS );
+
 include_once __DIR__ . '/../includes/AliyunOpenSearch.php';
 include_once __DIR__ . '/../includes/AliyunOpenSearchAdmin.php';
 include_once __DIR__ . '/../includes/AliyunOpenSearchClient.php';
 include_once __DIR__ . '/../includes/AliyunOpenSearchFrontend.php';
 include_once __DIR__ . '/../includes/AliyunOpenSearchOptions.php';
+include_once __DIR__ . '/../includes/AliyunOpenSearchException.php';
+

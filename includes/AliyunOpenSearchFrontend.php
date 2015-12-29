@@ -163,11 +163,23 @@ class AliyunOpenSearchFrontend
                 $this->paged = $this->paged > 0 ? $this->paged : 1;
             }
             $offset = ($this->paged - 1) * $this->limit;
-            $ret = $this->getOpenSearchClient()->search(
-                "default:'{$this->keyword}' AND post_status:'publish'",
-                $offset,
-                $this->limit
-            );
+            try {
+
+                $ret = $this->getOpenSearchClient()->search(
+                    "default:'{$this->keyword}' AND post_status:'publish'",
+                    $offset,
+                    $this->limit
+                );
+            } catch (AliyunOpenSearchException $e) {
+                wp_die(
+                    sprintf(
+                        '搜索文章时发生错误：%s，请检查您的配置是否有误。<a href="%s" target="_blank">查看错误码说明</a>',
+                        $e->getMessage(),
+                        AliyunOpenSearch::getErrorCodeReferencesUrl()
+                    )
+                );
+            }
+
             $this->posts = $ret['posts'];
             $this->postCount = $ret['total'];
             $this->pageCount = ceil($this->postCount / $this->limit);

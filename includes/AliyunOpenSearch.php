@@ -85,6 +85,8 @@ class AliyunOpenSearch
             . 'includes/AliyunOpenSearchAdmin.php';
         require_once plugin_dir_path(dirname(__FILE__))
             . 'includes/AliyunOpenSearchFrontend.php';
+        require_once plugin_dir_path(dirname(__FILE__))
+            . 'includes/AliyunOpenSearchException.php';
 
     }
 
@@ -135,5 +137,15 @@ class AliyunOpenSearch
     {
         $frontend->run();
         $admin->run();
+    }
+
+    /**
+     * Get error code references, useful when some API call errors occurred for users.
+     *
+     * @return string
+     */
+    public static function getErrorCodeReferencesUrl()
+    {
+        return 'https://help.aliyun.com/document_detail/opensearch/api-reference/call-method/errormsg.html';
     }
 }

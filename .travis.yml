@@ -1,13 +1,9 @@
 language: php
-
 php:
   - 5.3
   - 5.4
   - 5.5
   - 5.6
-
-services:
-  - mysql-server
 
 before_script:
   - mkdir -p build/logs
@@ -20,12 +16,13 @@ script:
 
 after_success:
   - ./vendor/bin/coveralls -v
+  - make archive
+
 deploy:
-    provider: releases
-    api_key:
-        secure: EH3xkaLCQIK4YToB4pFHz4L9Uhjh1eG5tG2i94OP6R3KVfmC3fugSTQSchKwlkJYdTl/Uj7Px0YUr0H0FeCvmi4lVai/NEM2PGthv6s6bO69MmivKhjkceqgcuDSDHsu/eNb0+4VC6jC7g6vGfTeKNUj17QQgLyFyG1kFN5xqbM=
-    file: build/aliyun-opensearch-wordpress.zip
-    skip_cleanup: true
-    on:
-        tags: true
-        all_branches: true
+  provider: releases
+  api_key:
+    secure: K0YopmWSHshje2fOYoQ/wPtfeWiASUCTFpEKmxiXY0XhZBJdsZlYoYXo5vqez/DpOJUtgzms8QYYVfu33I6/el49tgrYO3WCnAsul9EU7bq66QvhDfbXNKRCFv5kzPNu/tZRdt6GDLL2U2DkUMx9K6BHrHGxUKwe4FFx4ydWu0yKFXcKrPWztfrd+7ZrPSd4SvM4s2sObRYmvQl7pTO2At1xaOOn+L01d+N7ZyNb1Kmz5gXckVQRBbl5MZIe8vO2GRsY6usmLsRnhxMLKKHjeb5rIajhRerOcQeQ2Wtd3D66triThst9xPDKq9YHROX8QIDkXoDaSzFkDg7ZSX/H+DmwP2yTaGUsC4hfHgzRl6gn2V6MSECeRuvD0RwjOe8yGrBl/RwwSdVfwsJGsxoF34jECyVeC71sY8unNahZpMQmKdQvW341arBm9d932QwHb644kamgpJ4wxk8PwYoUSJii8cCXuy+rmN5YpO3J4UXbw/WoVEUvZmbUjl+MLSQLv2EK40r5DXXuGvaY6L+beTge8C4DomdpUFSYkK9EPmBHCbYhDjY3aWu40aixVwyQXsXrJFGdMoYDnbSNxB9w28hbnNexWXzlCXKUPG7LLMkp/77316Y2lKTVYPkWFh38/dwvyuPJM5NT3cfwZQdkmn25iDlQ+lwEUlYuVA8cnGM=
+  file: build/aliyun-opensearch-wordpress.zip
+  on:
+    tags: true
+    repo: mr5/aliyun-opensearch

@@ -84,7 +84,7 @@ class AliyunOpenSearchClient
      *
      * @return CloudsearchDoc
      */
-    private function getCloudSearchDoc()
+    public function getCloudSearchDoc()
     {
         if ($this->cloudSearchDoc == null) {
             $this->cloudSearchDoc = new CloudsearchDoc($this->appName, $this->getCloudSearchClient());
@@ -110,7 +110,7 @@ class AliyunOpenSearchClient
      *
      * @return CloudsearchSearch
      */
-    private function getCloudsearchSearch()
+    public function getCloudsearchSearch()
     {
         if ($this->cloudsearchSearch == null) {
             $this->cloudsearchSearch = new CloudsearchSearch($this->getCloudSearchClient());
@@ -137,7 +137,7 @@ class AliyunOpenSearchClient
      *
      * @return CloudsearchClient
      */
-    private function getCloudSearchClient()
+    public function getCloudSearchClient()
     {
         if ($this->cloudsearchClient == null) {
             $this->cloudsearchClient = new CloudsearchClient(
@@ -155,29 +155,25 @@ class AliyunOpenSearchClient
      * Delete given posts from AliYun Open Search.
      *
      * @param WP_Post[] $posts Posts will be deleted.
-     *
-     * @return int
+     * @throws AliyunOpenSearchException
      */
     public function deletePosts(array $posts)
     {
+        if (empty($posts)) {
+            return;
+        }
         $csDoc = $this->getCloudSearchDoc();
         $docs = array();
         /** @var WP_Post $post */
         foreach ($posts as $post) {
-            $docs[$post->post_type][] = array(
+            $docs[] = array(
                 'fields' => array(
                     'id' => $post->ID
                 ),
                 'cmd' => 'DELETE'
             );
         }
-        $successCount = 0;
-        foreach ($docs as $type => $_docs) {
-            $csDoc->remove($docs, 'main');
-            $successCount += count($docs);
-        }
-
-        return $successCount;
+        $this->APIResultProcess($csDoc->remove($docs, 'main'));
     }
 
     /**
@@ -185,10 +181,13 @@ class AliyunOpenSearchClient
      *
      * @param WP_Post[] $posts WP_Posts that you want to index.
      *
-     * @return int
+     * @throws AliyunOpenSearchException
      */
     public function savePosts(array $posts)
     {
+        if (empty($posts)) {
+            return;
+        }
         $csDoc = $this->getCloudSearchDoc();
         $docs = array();
         /** @var WP_Post $post */
@@ -221,25 +220,23 @@ class AliyunOpenSearchClient
                 'cmd' => 'UPDATE'
             );
         }
-        $csDoc->add($docs, 'main');
-        $this->cloudsearchClient->getRequest();
+        $ret = $csDoc->add($docs, 'main');
+        $this->APIResultProcess($ret);
+
     }
 
-    /**
-     * Initialize AliYun Open Search index with `builtin_news` schema template.
-     *
-     * @return string
-     */
-    public function initializeIndex()
+    private function APIResultProcess($ret)
     {
-        $index = new CloudsearchIndex($this->appName, $this->cloudsearchClient);
-
-        $index->createByTemplate(
-            file_get_contents(plugin_dir_path(__FILE__) . '/index-template.json'),
-            array(
-                'desc' => '由阿里云 WordPress 插件创建，请勿手动配置。'
-            )
-        );
+        $ret = json_decode($ret, true);
+        // {"status":"FAIL","errors":[{"code":5001,"message":"User doesnot exist"}],"request_id":"1451395397046965800818613"}
+        // {"status":"OK","request_id":"1451395489084060700489306"}
+        if ($ret['status'] == 'FAIL') {
+            $messages = '';
+            foreach ($ret['errors'] as $error) {
+                $messages .= sprintf("%s:%s\n", $error['code'], $error['message']);
+            }
+            throw new AliyunOpenSearchException($messages);
+        }
     }
 
     /**
@@ -248,6 +245,7 @@ class AliyunOpenSearchClient
      * @param string $query Query string under AliYun Open Search API references.
      *
      * @return array
+     * @throws AliyunOpenSearchException
      */
     public function search($query, $offset = 0, $limit = 10)
     {
@@ -262,18 +260,13 @@ class AliyunOpenSearchClient
 
 
         $ret = $searcher->search();
+        $this->APIResultProcess($ret);
         $ret = json_decode($ret);
-        if ($ret && $ret->errors) {
-            $messages = '<h4>请求搜索服务器时,发生以下错误,请检查您的配置是否有误:</h4><br>';
-            foreach ($ret->errors as $error) {
-                $messages .= $error->code . ': ' . $error->message . '<br>';
-            }
-            wp_die($messages);
-        }
         $result = array(
             'total' => 0,
             'posts' => array()
         );
+
         if ($ret && isset($ret->result) && $ret->result->viewtotal > 0) {
             $posts = array();
             $localOffsetSecs = get_option('gmt_offset') * HOUR_IN_SECONDS;

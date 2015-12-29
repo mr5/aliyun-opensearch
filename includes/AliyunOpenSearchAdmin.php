@@ -139,7 +139,17 @@ class AliyunOpenSearchAdmin
             );
             $currentProcessing = count($posts) + (($paged - 1) * $posts_per_page);
             $hasMore = $paged * $posts_per_page < $query->found_posts;
-            $this->getOpenSearchClient()->savePosts($posts);
+            try {
+                $this->getOpenSearchClient()->savePosts($posts);
+            } catch (AliyunOpenSearchException $e) {
+                wp_die(
+                    sprintf(
+                        '保存文章到阿里云时发生错误:%s, 请检查您的配置是否有误. <a href="%s" target="_blank">查看错误码说明</a>',
+                        $e->getMessage(),
+                        AliyunOpenSearch::getErrorCodeReferencesUrl()
+                    )
+                );
+            }
         }
 
         include plugin_dir_path(dirname(__FILE__)) . 'admin/views/indexPosts.php';
@@ -176,7 +186,17 @@ class AliyunOpenSearchAdmin
         if ($post->post_status == 'auto-draft') {
             return;
         }
-        $this->getOpenSearchClient()->savePosts(array($post));
+        try {
+            $this->getOpenSearchClient()->savePosts(array($post));
+        } catch (AliyunOpenSearchException $e) {
+            wp_die(
+                sprintf(
+                    '保存文章到阿里云时发生错误:%s, 请检查您的配置是否有误. <a href="%s" target="_blank">查看错误码说明</a>',
+                    $e->getMessage(),
+                    AliyunOpenSearch::getErrorCodeReferencesUrl()
+                )
+            );
+        }
     }
 
     /**
@@ -195,7 +215,17 @@ class AliyunOpenSearchAdmin
         ) {
             return;
         }
-        $this->getOpenSearchClient()->deletePosts(array($post));
+        try {
+            $this->getOpenSearchClient()->deletePosts(array($post));
+        } catch (AliyunOpenSearchException $e) {
+            wp_die(
+                sprintf(
+                    '从阿里云删除文章时发生错误：%s，请检查您的配置是否有误。<a href="%s" target="_blank">查看错误码说明</a>',
+                    $e->getMessage(),
+                    AliyunOpenSearch::getErrorCodeReferencesUrl()
+                )
+            );
+        }
     }
 
     /**

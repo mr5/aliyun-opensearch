@@ -189,6 +189,22 @@ class AliyunOpenSearchFrontendTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($this->frontend->preGetPosts($wp_query)->query_vars, $query_vars);
     }
 
+    /**
+     * @expectedException WPDieException
+     */
+    public function testPreGetPostsDie()
+    {
+        $wp_query = new WP_Query();
+
+        $wp_query->is_search = true;
+        $wp_query->is_admin = false;
+        $wp_query->is_main_query = true;
+        $wp_query->query['s'] = 'aliyun';
+        $wp_query->posts = array(new WP_Post());
+        $this->aliyunOpenSearchClient->shouldReceive('search')->andThrow('AliyunOpenSearchException');
+        $this->frontend->preGetPosts($wp_query);
+    }
+
     public function testEnqueueStyles()
     {
         $this->frontend->enqueueStyles();

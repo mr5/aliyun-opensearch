@@ -30,7 +30,8 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->aliyunOpenSearchClient = m::mock('AliyunOpenSearchClient');
-        $this->admin = new AliyunOpenSearchAdmin($this->pluginName, $this->pluginVersion, $this->aliyunOpenSearchClient);
+        $this->admin = new AliyunOpenSearchAdmin($this->pluginName, $this->pluginVersion,
+            $this->aliyunOpenSearchClient);
 
     }
 
@@ -91,6 +92,18 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException WPDieException
+     */
+    public function testIndexPostsDie()
+    {
+        $_REQUEST['paged'] = 1;
+        $searchClient = m::mock('AliyunOpenSearchClient');
+        $searchClient->shouldReceive('savePosts')->once()->andThrow('AliyunOpenSearchException');
+        $this->admin->setOpenSearchClient($searchClient);
+        $this->admin->indexPosts();
+    }
+
+    /**
      * @dataProvider afterSavePostProvider
      */
     public function testAfterSavePost($id, $post, $times)
@@ -104,6 +117,18 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
         $this->admin->afterSavePost($id);
     }
 
+    /**
+     * @expectedException WPDieException
+     */
+    public function testAfterSavePostDie()
+    {
+        add_post(1, new WP_Post());
+        $searchClient = m::mock('AliyunOpenSearchClient');
+        $this->admin->setOpenSearchClient($searchClient);
+        $searchClient->shouldReceive('savePosts')->once()->andThrow('AliyunOpenSearchException');
+        $this->admin->afterSavePost(1);
+    }
+
     public function testDraftPost()
     {
         $post = new WP_Post();
@@ -114,6 +139,7 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
         $searchClient->shouldReceive('savePosts')->never();
         $this->admin->afterSavePost(4);
     }
+
     /**
      * @dataProvider afterSavePostProvider
      */
@@ -122,10 +148,22 @@ class AliyunOpenSearchAdminTest extends \PHPUnit_Framework_TestCase
         if ($post != null) {
             add_post($id, $post);
         }
-        $searchClient = m::mock('AliyunOpenSearchClient_');
+        $searchClient = m::mock('AliyunOpenSearchClient');
         $this->admin->setOpenSearchClient($searchClient);
         $searchClient->shouldReceive('deletePosts')->times($times);
         $this->admin->afterDeletePost($id);
+    }
+
+    /**
+     * @expectedException WPDieException
+     */
+    public function testAfterDeletePostDie()
+    {
+        add_post(1, new WP_Post());
+        $searchClient = m::mock('AliyunOpenSearchClient');
+        $this->admin->setOpenSearchClient($searchClient);
+        $searchClient->shouldReceive('deletePosts')->once()->andThrow('AliyunOpenSearchException');
+        $this->admin->afterDeletePost(1);
     }
 
     public function afterSavePostProvider()
