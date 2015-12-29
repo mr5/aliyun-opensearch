@@ -17,10 +17,9 @@ script:
 
 after_success:
   - ./vendor/bin/coveralls -v
-  - echo `git cat-file tag $TRAVIS_TAG` > VERSION
+  - echo $TRAVIS_TAG > VERSION
   - make travis-version-replacement
   - make archive
-
 
 deploy:
   provider: releases
