@@ -3,8 +3,8 @@ list:
 	@echo "travis-version-replacement: Just version replacement under travis ci."
 
 travis-archive:
-	-rm build/aliyun-opensearch-wordpress.zip
-	zip -r build/aliyun-opensearch-wordpress.zip ./  -x "/build/*" -x "/tests/*" -x "/vendor/*" -x "/.git/*" -x "/.*"
+	-rm build/aliyun-opensearch-wordpress*.zip
+	zip -r build/aliyun-opensearch-wordpress-${TRAVIS_TAG}.zip ./  -x "/build/*" -x "/tests/*" -x "/vendor/*" -x "/.git/*" -x "/.*"
 
 travis-version-replacement:
 	echo $TRAVIS_TAG > VERSION
