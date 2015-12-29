@@ -4,7 +4,7 @@ Plugin Name: AliYun Open Search
 Plugin URI: http://www.aliyun.com/product/opensearch/
 Description: Aliyun Open Search is a hosting service for structured data searching. Supporting data structures, sorting and data processing freedom to customize. Aliyun Open Search provides a simple, low cost, stable and efficient search solution for your sites or applications.
 Author: Aliyun
-Version: dev
+Version:dev
 Author URI: http://www.aliyun.com/product/opensearch/
 */
 

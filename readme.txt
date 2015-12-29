@@ -3,7 +3,7 @@ Contributors:
 Tags: open search, aliyun, search engine
 Requires at least: 3.8
 Tested up to: 4.3
-Stable tag: dev
+Stable tag:dev
 
 == Description ==
 
