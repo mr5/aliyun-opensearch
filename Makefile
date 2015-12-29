@@ -7,6 +7,6 @@ travis-archive:
 	zip -r build/aliyun-opensearch-wordpress-${TRAVIS_TAG}.zip ./  -x "/build/*" -x "/tests/*" -x "/vendor/*" -x "/.git/*" -x "/.*"
 
 travis-version-replacement:
-	echo $TRAVIS_TAG > VERSION
+	echo ${TRAVIS_TAG} > VERSION
 	sed -i "s/Version: dev/Version: `cat VERSION`/g" ./aliyun-opensearch.php
 	sed -i "s/Stable tag: dev/Stable tag: `cat VERSION`/g" ./readme.txt
