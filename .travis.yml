@@ -18,8 +18,7 @@ script:
 after_success:
   - ./vendor/bin/coveralls -v
   - echo `git cat-file tag $TRAVIS_TAG` > VERSION
-  - sed -i "s/Version:dev/Version: `cat VERSION`/g" ./aliyun-opensearch.php
-  - sed -i "s/Stable tag:dev/Stable tag: `cat VERSION`/g" ./readme.txt
+  - make travis-version-replacement
   - make archive
 
 
