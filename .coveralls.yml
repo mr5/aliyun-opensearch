@@ -1,4 +1,1 @@
-src_dir: ./includes
-coverage_clover: ./build/logs/clover.xml
-json_path: ./build/logs/coveralls.json
-exclude_no_stmt: true
+coverage_clover: build/logs/clover.xml

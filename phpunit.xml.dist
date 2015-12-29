@@ -23,6 +23,9 @@
     <listeners>
         <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
     </listeners>
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+    </php>
     <logging>
         <log type="coverage-html" target="build/logs/clover.html"/>
 
