@@ -20,7 +20,9 @@ This plugin make an integration of WordPress and AliYun Open Search in an easy w
 ## Installation
 
 Download the [latest release](https://github.com/mr5/aliyun-opensearch/releases) of this plugin (the file ends with `.zip`).
+
 Open your WordPress admin dashboard: 
+
 1. Open the `plugins` page;
 2. Click the `Add New` button;
 3. Click the `Upload Plugin` button;
