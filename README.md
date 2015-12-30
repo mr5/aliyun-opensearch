@@ -54,5 +54,6 @@ Open your WordPress admin dashboard:
 2. After the options saved with the `保存更改` button,  click the `重建索引` button if you have written some posts or pages before to index them.
 1. DONE!
 
+
 ## See also
 http://www.aliyun.com/product/opensearch/
